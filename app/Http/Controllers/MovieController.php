@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Movie;
+use App\Http\Requests\MovieRequest;
 
 class MovieController extends Controller
 {
@@ -13,7 +15,8 @@ class MovieController extends Controller
      */
     public function index()
     {
-        //
+        $movies = Movie::all();
+        return $movies;
     }
 
     /**
@@ -32,9 +35,18 @@ class MovieController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(MovieRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        return Movie::create([
+            'title' => $validated['title'],
+            'director' => $validated['director'],
+            'imgUrl' => $validated['imgUrl'],
+            'duration' => $validated['duration'],
+            'releaseDate' => $validated['releaseDate'],
+            'genre' => $validated['genre'],
+        ]);
     }
 
     /**
@@ -45,7 +57,8 @@ class MovieController extends Controller
      */
     public function show($id)
     {
-        //
+        $movie = Movie::find($id);
+        return $movie;
     }
 
     /**
@@ -66,9 +79,18 @@ class MovieController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(MovieRequest $request, $id)
     {
-        //
+        $validated = $request->validated();
+
+        return Movie::where('id', $id)->update([
+            'title' => $validated['title'],
+            'director' => $validated['director'],
+            'imgUrl' => $validated['imgUrl'],
+            'duration' => $validated['duration'],
+            'releaseDate' => $validated['releaseDate'],
+            'genre' => $validated['genre'],
+        ]);
     }
 
     /**
@@ -79,6 +101,6 @@ class MovieController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return Movie::where('id', $id)->delete();
     }
 }
