@@ -13,10 +13,33 @@ class MovieController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    
+    public function index(Request $request)
     {
-        $movies = Movie::all();
-        return $movies;
+
+        $title = $request->query('title', '');
+        $take = $request->query('take');
+        $skip = $request->query('skip');
+
+        if ($title) {
+            return Movie::searchByTitle($title)->take($take)->skip($skip)->get();
+        }
+
+        return Movie::all();
+        // 1. nacin
+        
+        // if ($title) {
+        //     return  Movie::query()->searchByTitle($title);
+        // };
+        // return Movie::all();
+
+        // $movies = Movie::all();
+        // return $movies;
+
+
+        // 2. jako kul nacin
+
+        //return Movie::query()->searc($title)->take($take)->skip($skip)->get();
     }
 
     /**
@@ -86,7 +109,7 @@ class MovieController extends Controller
         return Movie::where('id', $id)->update([
             'title' => $validated['title'],
             'director' => $validated['director'],
-            'imgUrl' => $validated['imgUrl'],
+            'imageUrl' => $validated['imageUrl'],
             'duration' => $validated['duration'],
             'releaseDate' => $validated['releaseDate'],
             'genre' => $validated['genre'],

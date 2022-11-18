@@ -19,4 +19,10 @@ class Movie extends Model
     'releaseDate',
     'genre',
     ];
+
+
+    public static function scopesearchByTitle($query, $title)
+    {
+        return self::where('title', 'LIKE', '%' . $title . '%');
+    }
 }
